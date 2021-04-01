@@ -63,7 +63,7 @@ from skfuzzy import control as ctrl
 
 padrao = ctrl.Antecedent(np.arange(0, 11, 1), 'padrao')
 metragem = ctrl.Antecedent(np.arange(0, 101, 1), 'metragem')
-valor = ctrl.Consequent(np.arange(0, 100, 1), 'valor')
+valor = ctrl.Consequent(np.arange(0, 101, 1), 'valor')
 # Auto-membership function population is possible with .automf(3, 5, or 7)
 padrao.automf(3)
 metragem.automf(3)
@@ -82,18 +82,18 @@ To help understand what the membership looks like, use the ``view`` methods.
 """
 
 # You can see how these look with .view()
-padrao['average'].view()
+# padrao['average'].view()
 
 
 """
 .. image:: PLOT2RST.current_figure
 """
-metragem.view()
+# metragem.view()
 
 """
 .. image:: PLOT2RST.current_figure
 """
-valor.view()
+# valor.view()
 """
 .. image:: PLOT2RST.current_figure
 
@@ -122,6 +122,7 @@ rule5 = ctrl.Rule(padrao['poor'] & metragem['good'], valor['meiobarato'])
 rule6 = ctrl.Rule(metragem['poor'], valor['barato'])
 rule7 = ctrl.Rule(metragem['good'], valor['caro'])
 rule8 = ctrl.Rule(metragem['good'] & padrao['good'], valor['caro'])
+rule9 = ctrl.Rule(padrao['good'] & metragem['average'], valor['medioalto'])
 
 
 #rule1.view()
@@ -135,8 +136,8 @@ Control System Creation and Simulation
 Now that we have our rules defined, we can simply create a control system
 via:
 """
-valorping_ctrl = ctrl.ControlSystem([rule1, rule2, rule3, rule4, rule5, rule6, rule7, rule8])
-
+valorping_ctrl = ctrl.ControlSystem([rule1, rule2, rule3, rule4, rule5, rule6, rule7, rule8, rule9])
+# valorping_ctrl.view()
 """
 In order to simulate this control system, we will create a
 ``ControlSystemSimulation``.  Think of this object representing our controller
@@ -147,7 +148,7 @@ for Travis at the cafe because the inputs would be different.
 """
 
 valorping = ctrl.ControlSystemSimulation(valorping_ctrl)
-
+# valorping.view()
 """
 We can now simulate our control system by simply specifying the inputs
 and calling the ``compute`` method.  Suppose we rated the padrao 6.5 out of 10
@@ -156,8 +157,8 @@ and the metragem 9.8 of 10.
 # Pass inputs to the ControlSystem using Antecedent labels with Pythonic API
 # Note: if you like passing many inputs all at once, use .inputs(dict_of_data)
 
-valorping.input['padrao'] = 10
-valorping.input['metragem'] = 100
+valorping.input['padrao'] = 1
+valorping.input['metragem'] = 52
 
 # Crunch the numbers
 valorping.compute()
